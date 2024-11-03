@@ -52,3 +52,15 @@ body {
     background-position: center;
     background-size: 100%;
 }
+
+a.login-banner-link:link,
+a.login-banner-link:visited,
+a.login-banner-link:hover,
+a.login-banner-link:active {
+    font-family: "Helvetica Neue", Helvetica, serif;
+    color: #1da1f2;
+    text-decoration: none;
+    display: block;
+    align-self: center;
+    margin-right: 20px;
+}
