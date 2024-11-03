@@ -10,13 +10,12 @@
         {{ .title }}
     </h1>
 
-    <div class="login-container">
-        {{if eq .isLoggedIn true}}
-            {{template "logoutButton"}}
-        {{ else }}
-            {{template "loginButton" . }}
-        {{ end }}
-    </div>
+    {{if eq .isLoggedIn true}}
+        <a href="/login" class="login-banner-link">Login</a>
+    {{ else }}
+        already logged in
+    {{ end }}
+
 </div>
 
 <h2 class="goals">Reach Your Goals</h2>
