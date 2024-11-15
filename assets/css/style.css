@@ -76,6 +76,12 @@ body {
     background-color: #A3C1AD;
 }
 
+.cta-button:hover {
+    background-color: #356081;
+    transform: scale(1.05);
+    transition: all 0.2s ease-in-out;
+}
+
 .how-it-works-button:hover {
     text-decoration: underline;
 }

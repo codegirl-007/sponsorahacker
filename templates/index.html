@@ -4,19 +4,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-<div class="header">
-    <img src="assets/images/logo.jpg" class="logo"/>
-    <h1 class="title">
-        {{ .title }}
-    </h1>
-
-    {{if eq .isLoggedIn false}}
-        <a href="/login" class="login-banner-link">Login</a>
-    {{ else }}
-        <a href="auth/logout/twitch" class="login-banner-link">Logout</a>
-    {{ end }}
-
-</div>
+{{template "pageheader"}}
 <div class="content">
     <h2 class="difference">Set Goals. Support Dreams. Build Community.</h2>
     <p class="product-description">Our platform connects aspiring tech professionals with a supportive community eager to help them succeed.
@@ -24,31 +12,31 @@
         Together, we make tech education more accessible, one goal at a time.</p>
 
 
-    <a href="/login" class="cta-button">Set Your Goals</a>
+    <a href="/login" class="cta-button">Get Started</a>
     <a href="#" class="how-it-works-button">How it works</a>
 </div>
 
 <div class="how-it-works-container">
-    <h2 class="headline">Find Support In Your Growth</h2>
+    <h2 class="headline">Your Goals, Supported by Community</h2>
     <div class="column">
-        <h3>Create Your Wishlist</h3>
-        <p>Sign up and add the certifications or courses you’re aiming to complete. Let people know what you're working toward and why each goal is important for your tech journey.</p>
+        <h3>Set Your Goals</h3>
+        <p>Sign up to add your certification or course goals and share why they matter for your tech journey.</p>
     </div>
     <div class="column">
         <h3>Get Community Support</h3>
-        <p>Share your wishlist with your favorite communities. Your supporters can contribute to your goals, helping you fund the education and certifications you need to grow.</p>
+        <p>Share your wishlist with your community and get support to fund your education and certifications.</p>
     </div>
     <div class="column">
         <h3>Participate in Hackathons</h3>
-        <p>Join community hackathons to test your skills, learn from others, and showcase your talent. Collaborate, innovate, and grow in a supportive environment.</p>
+        <p>Join hackathons to collaborate, innovate, and grow your skills in a supportive community.</p>
     </div>
 </div>
 
 <div class="become-a-supporter-container">
-    <h2 class="headline">Become a supporter</h2>
+    <h2 class="headline">Become a Supporter</h2>
     <div class="column">
         <h3>Sponsor a Hackathon</h3>
-        <p>Support community-driven hackathons by covering entry fees or providing prizes. Help aspiring tech professionals showcase their skills and network with others.</p>
+        <p>Support streamer hackathons by funding prizes that help tech professionals showcase their skills and achieve their goals.</p>
     </div>
     <div class="column">
         <h3>Donate Directly to a Goal</h3>
@@ -56,9 +44,9 @@
     </div>
     <div class="column">
         <h3>Support Community Leaders</h3>
-        <p>Boost a community content by supporting leaders and help them fund tech education for members of their community. Your support empowers streamers to give back directly.</p>
+        <p>Support community leaders to fund tech education for their members, empowering streamers to give back directly.</p>
     </div>
 </div>
-
+{{template "footer"}}
 </body>
 </html>
