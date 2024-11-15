@@ -3,8 +3,8 @@ package utils
 import "github.com/gin-gonic/gin"
 
 func CheckIfLoggedIn(c *gin.Context) bool {
-	userID, err := c.Cookie("user_id")
-	if err != nil || userID == "" {
+	cookie, err := c.Cookie("_session")
+	if err != nil || cookie == "" {
 		return false
 	}
 

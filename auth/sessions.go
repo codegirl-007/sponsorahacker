@@ -3,105 +3,153 @@ package auth
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"github.com/gorilla/sessions"
+	"github.com/gorilla/securecookie"
+	"github.com/markbates/goth"
+	"net/url"
 	"sponsorahacker/config"
 	"sponsorahacker/db"
+	"strconv"
+	"time"
 )
 
-type SessionManager interface {
-	SetSession(username string, c *gin.Context) error
-	GetSession(c *gin.Context) (string, error)
+type SessionStore interface {
+	CreateSession(*gin.Context) error
+	GetSession(string) (Session, error)
+	DeleteSession(string) error
 }
 
-type SessionStore struct {
-	SessionDB db.Database
-	Store     *sessions.CookieStore
+type SessionManager struct {
+	DB *db.DBClient
 }
 
-func NewSessionManager(dbUrl string) (*SessionStore, error) {
-	db, err := db.NewDbClient(dbUrl)
+type Session struct {
+	sessionId   string
+	sessionData string
+	createdOn   string
+	modifiedOn  string
+	expiresOn   string
+}
+
+var secureCookie *securecookie.SecureCookie
+
+func NewSessionManager(db *db.DBClient) SessionManager {
+
+	return SessionManager{DB: db}
+}
+
+func (s *SessionManager) CreateSession(user goth.User, c *gin.Context) error {
+	// create a new row that will store the user data
+	sessionData, err := json.Marshal(user)
 	if err != nil {
-		return nil, err
+		fmt.Printf("error marshalling user: %v", err)
 	}
 
-	// Create sessions table if not exist
-	_, err = db.Exec(`
-	CREATE TABLE IF NOT EXISTS sessions (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		session_id TEXT NOT NULL UNIQUE,
-		data BLOB NOT NULL,
-		created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-		updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-	);
-	`)
-
-	if err != nil {
-		return nil, err
+	auth := Session{
+		sessionData: string(sessionData),
+		createdOn:   time.Now().Format("20060102150405"),
+		modifiedOn:  time.Now().Format("20060102150405"),
+		expiresOn:   user.ExpiresAt.Format("20060102150405"),
 	}
 
-	sessionSecret := config.GetEnvVar("SESSION_SECRET")
+	// todo: insert the query once you figure the rest out
+	result, err := s.DB.Exec(`
+    INSERT INTO sessions (sessionData, createdOn, modifiedOn, expiresOn)
+    VALUES (?, ?, ?, ?);`, auth.sessionData, auth.createdOn, auth.modifiedOn, auth.expiresOn)
 
-	store := sessions.NewCookieStore([]byte(sessionSecret))
-	return &SessionStore{db, store}, nil
-}
-
-func (s *SessionStore) SetSession(username string, c *gin.Context) error {
-	session, err := s.Store.Get(c.Request, "session")
-	if err != nil {
+	if result == nil {
+		fmt.Printf("error getting result from database while creating the session: %v", err)
 		return err
 	}
 
-	session.Values["username"] = username
-	if err := session.Save(c.Request, c.Writer); err != nil {
+	sessionId, err := result.LastInsertId()
+
+	if err != nil {
+		fmt.Printf("error getting session id from database while creating the session: %v", err)
+	}
+
+	hash := []byte(config.GetEnvVar("COOKIE_HASH"))
+	block := []byte(config.GetEnvVar("COOKIE_BLOCK"))
+	secureCookie = securecookie.New(hash, block)
+	cookieValue := map[string]string{
+		"sessionId": strconv.Itoa(int(sessionId)),
+	}
+
+	encoded, err := secureCookie.Encode("_session", cookieValue)
+
+	if err != nil {
+		fmt.Printf("error encoding cookie value: %v", err)
 		return err
 	}
 
-	return s.saveSessionToDB(session)
+	c.SetCookie("_session", encoded, 3600, "/", "localhost", false, true)
+
+	return nil
 }
 
-func (s *SessionStore) GetSession(c *gin.Context) (string, error) {
-	session, err := s.Store.Get(c.Request, "session")
+func (s *SessionManager) GetSession(session sessions.Session) (Session, error) {
+	// query for one row
+	result, err := s.DB.Query(`SELECT sessionData FROM sessions WHERE sessionId=$1 LIMIT 1`, session.ID())
+
+	// if err, then return an empty struct
 	if err != nil {
-		return "", err
+		return Session{}, err
 	}
 
-	username, ok := session.Values["username"].(string)
-	if !ok {
-		return "", fmt.Errorf("username not found in session")
+	// else go through the results and create a Session
+	for result.Next() {
+		var s Session
+
+		// unless there is an error, of course, then return an empty struct
+		if err := result.StructScan(&s); err != nil {
+			return Session{}, err
+		}
+
+		return s, nil
 	}
 
-	return username, nil
+	// if we get nothing, well, we go nothing
+	return Session{}, nil
 }
 
-func (s *SessionStore) DeleteSession(c *gin.Context) error {
-	session, err := s.Store.Get(c.Request, "session")
-	if err != nil {
-		return err
+func (s *SessionManager) DeleteSession(c *gin.Context) error {
+	if cookie, err := c.Request.Cookie("_session"); err == nil {
+		value := make(map[string]string)
+
+		cookieValue, _ := url.QueryUnescape(cookie.Value)
+
+		hash := []byte(config.GetEnvVar("COOKIE_HASH"))
+		block := []byte(config.GetEnvVar("COOKIE_BLOCK"))
+		secureCookie := securecookie.New(hash, block)
+
+		err = secureCookie.Decode("_session", cookieValue, &value)
+
+		if err != nil {
+			fmt.Printf("error decoding cookie value: %v", err)
+			return err
+		}
+
+		sessionId := value["sessionId"]
+		sessionIdInt, err := strconv.Atoi(sessionId)
+
+		if err != nil {
+			fmt.Printf("error converting sessionId to int: %v", err)
+			return err
+		}
+
+		_, err = s.DB.Exec(`DELETE FROM sessions WHERE ID = ?`, sessionIdInt)
+
+		if err != nil {
+			return err
+		}
+
+		if err != nil {
+			return err
+		}
 	}
 
-	session.Values["username"] = make(map[interface{}]interface{})
+	c.SetCookie("_session", "", -1, "/", "localhost", false, true)
 
-	if err := session.Save(c.Request, c.Writer); err != nil {
-		return err
-	}
-
-	_, err = s.SessionDB.Exec("DELETE FROM sessions WHERE session_id = ?", session.ID)
-
-	return err
-}
-
-func (s *SessionStore) saveSessionToDB(session *sessions.Session) error {
-	data, err := json.Marshal(session.Values)
-	if err != nil {
-		return err
-	}
-
-	_, err = s.SessionDB.Exec(`
-	INSERT INTO sessions (session_id, data, updated_at)
-	VALUES (?, ?, CURRENT_TIMESTAMP)
-	ON CONFLICT(session_id) DO UPDATE SET data = ?, updated_at = CURRENT_TIMESTAMP
-	`, session.ID, data, data)
-
-	return err
+	return nil
 }

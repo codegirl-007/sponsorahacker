@@ -5,7 +5,7 @@ import (
 	"github.com/markbates/goth/gothic"
 	"log"
 	"net/http"
-	"sponsorahacker/config"
+	db "sponsorahacker/db"
 )
 
 func Login(c *gin.Context) {
@@ -17,11 +17,14 @@ func Login(c *gin.Context) {
 }
 
 func Callback(c *gin.Context) {
-	sessionStore, err := NewSessionManager(config.GetEnvVar("DATABASE_URL"))
+	dbclient, err := db.NewDbClient()
+
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		return
 	}
 
+	sessionStore := NewSessionManager(dbclient)
 	user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
 
 	if err != nil {
@@ -30,10 +33,10 @@ func Callback(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("user_id", user.UserID, 3600, "/", "localhost", false, true)
-	err = sessionStore.SetSession(user.Name, c)
+	err = sessionStore.CreateSession(user, c)
+
 	if err != nil {
-		log.Println("failed to set session:", err)
+		log.Println("failed to create session in db:", err)
 	}
 
 	// For now, redirect to profile page after successful login
@@ -41,14 +44,24 @@ func Callback(c *gin.Context) {
 }
 
 func Logout(c *gin.Context) {
-	sessionStore, err := NewSessionManager(config.GetEnvVar("DATABASE_URL"))
+	dbClient, err := db.NewDbClient()
+
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
+		return
 	}
-	c.SetCookie("user_id", "", -1, "/", "localhost", false, true)
+
+	sessionStore := NewSessionManager(dbClient)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
 	err = sessionStore.DeleteSession(c)
+
 	if err != nil {
-		log.Println("failed to delete session:", err)
+		log.Fatal("failed to delete session:", err)
 	}
+
 	c.Redirect(http.StatusTemporaryRedirect, "/")
 }

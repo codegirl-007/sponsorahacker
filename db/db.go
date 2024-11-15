@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/tursodatabase/go-libsql"
+	"os"
 )
 
 type Database interface {
@@ -17,7 +18,8 @@ type DBClient struct {
 	db *sqlx.DB
 }
 
-func NewDbClient(dsn string) (Database, error) {
+func NewDbClient() (*DBClient, error) {
+	dsn := os.Getenv("DATABASE_URL")
 	db, err := sqlx.Open("libsql", dsn)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open db: %w", err)
