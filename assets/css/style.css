@@ -4,6 +4,7 @@ body {
     margin: 0;
     padding: 0;
     font-size: 16px;
+    font-family: "Helvetica Neue", Helvetica, serif;
 }
 
 .header {
@@ -142,4 +143,17 @@ body {
     font-size: 1.15em;
     color: #495057;
     line-height: 1.6;
+}
+
+.footer {
+    background-color: #457B9D; /* Muted blue */
+    color: #FFFFFF; /* White text */
+    text-align: center;
+    padding: 15px 10px;
+}
+
+.footer a {
+    color: #A3C1AD; /* Muted green */
+    text-decoration: none;
+    font-weight: bold;
 }

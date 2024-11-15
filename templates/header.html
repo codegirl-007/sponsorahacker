@@ -1,0 +1,15 @@
+{{define "pageheader"}}
+<div class="header">
+    <img src="assets/images/logo.jpg" class="logo"/>
+    <h1 class="title">
+        Sponsor A Hacker
+    </h1>
+
+    {{if eq .isLoggedIn false}}
+    <a href="/login" class="login-banner-link">Login</a>
+    {{ else }}
+    <a href="auth/logout/twitch" class="login-banner-link">Logout</a>
+    {{ end }}
+
+</div>
+{{end}}

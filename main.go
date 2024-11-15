@@ -37,6 +37,8 @@ func main() {
 	// pages routes
 	r.GET("/", pages.Home)
 	r.GET("/login", pages.Login)
+	r.GET("/welcome", pages.Welcome)
+	r.GET("/wishlist", pages.Wishlist)
 
 	runErr := r.Run(":8080")
 
