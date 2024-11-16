@@ -5,7 +5,7 @@
         Sponsor A Hacker
     </h1>
 
-    {{if eq .isLoggedIn false}}
+    {{if eq . false}}
     <a href="/login" class="login-banner-link">Login</a>
     {{ else }}
     <a href="auth/logout/twitch" class="login-banner-link">Logout</a>
