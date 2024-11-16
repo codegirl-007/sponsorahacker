@@ -4,140 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/welcome.css" />
     <title>Dashboard</title>
-    <style>
-
-        .dashboard-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .welcome {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .welcome h1 {
-            color: #457b9d;
-            margin-bottom: 10px;
-        }
-
-        .welcome p {
-            font-size: 1.2em;
-            color: #495057;
-        }
-
-        .section {
-            margin-bottom: 40px;
-            padding: 20px;
-            border-radius: 8px;
-        }
-
-        .section h2 {
-            color: #457b9d;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* Two columns layout */
-            gap: 20px; /* Space between cards */
-        }
-
-        .card {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            text-align: center;
-        }
-
-        .card h3 {
-            margin: 0 0 10px 0;
-            color: #495057;
-        }
-
-        .card p {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 15px;
-        }
-
-        .card button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #a3c1ad;
-            color: white;
-            font-size: 1em;
-            cursor: pointer;
-        }
-
-        .card button:hover {
-            background-color: #91a4b1;
-        }
-
-    </style>
 </head>
 <body>
 {{template "pageheader" . }}
 <div class="dashboard-container">
     <div class="dashboard-container">
         <div class="welcome">
-            <h1>Welcome, Codegirl007!</h1>
-            <p>Find your path, fund futures, or inspire a community today.</p>
+            <h1 class="welcome-title">Welcome, Codegirl007!</h1>
+            <p class="tagline">Find your path, fund futures, or inspire a community today.</p>
         </div>
 
         <div class="section learners">
-            <h2>Build Your Tech Future</h2>
+            <h2 class="section-title">Build Your Tech Future</h2>
             <div class="cards">
                 <div class="card">
-                    <h3>Your Wishlist</h3>
-                    <p>Track your certifications and courses. Update or add goals to keep your community engaged.</p>
-                    <button>Add a Goal</button>
+                    <h3 class="card-title">Your Wishlist</h3>
+                    <p class="card-content">Track your certifications and courses. Update or add goals to keep your community engaged.</p>
+                    <button class="card-button">Add a Goal</button>
                 </div>
                 <div class="card">
-                    <h3>Community Opportunities</h3>
-                    <p>Join upcoming hackathons or community events to grow your skills and network.</p>
-                    <button>View Events</button>
+                    <h3 class="card-title">Community Opportunities</h3>
+                    <p class="card-content">Join upcoming hackathons or community events to grow your skills and network.</p>
+                    <button class="card-button">View Events</button>
                 </div>
                 <div class="card">
-                    <h3>Learning Resources</h3>
-                    <p>Access curated tutorials, guides, and practice challenges to enhance your skills.</p>
-                    <button>Explore Resources</button>
+                    <h3 class="card-title">Learning Resources</h3>
+                    <p class="card-content">Access curated tutorials, guides, and practice challenges to enhance your skills.</p>
+                    <button class="card-button">Explore Resources</button>
                 </div>
                 <div class="card">
-                    <h3>Connect with Mentors</h3>
-                    <p>Get advice and guidance from experienced professionals to boost your learning journey.</p>
-                    <button>Find a Mentor</button>
+                    <h3 class="card-title">Connect with Mentors</h3>
+                    <p class="card-content">Get advice and guidance from experienced professionals to boost your learning journey.</p>
+                    <button class="card-button">Find a Mentor</button>
                 </div>
             </div>
         </div>
 
         <div class="section supporters">
-            <h2>Help Make Dreams Happen</h2>
+            <h2 class="section-title">Help Make Dreams Happen</h2>
             <div class="cards">
                 <div class="card">
-                    <h3>Fund a Goal</h3>
-                    <p>Choose a learner’s wishlist item and contribute to their education journey.</p>
-                    <button>Browse Goals</button>
+                    <h3 class="card-title">Fund a Goal</h3>
+                    <p class="card-content">Choose a learner’s wishlist item and contribute to their education journey.</p>
+                    <button class="card-button">Browse Goals</button>
                 </div>
                 <div class="card">
-                    <h3>Host or Sponsor a Hackathon</h3>
-                    <p>Support innovation by organizing or sponsoring a hackathon for the community.</p>
-                    <button>Get Involved</button>
+                    <h3 class="card-title">Host or Sponsor a Hackathon</h3>
+                    <p class="card-content">Support innovation by organizing or sponsoring a hackathon for the community.</p>
+                    <button class="card-button">Get Involved</button>
                 </div>
                 <div class="card">
-                    <h3>Support a Streamer</h3>
-                    <p>Boost streamers who are funding education for members of their community.</p>
-                    <button>View Streamers</button>
+                    <h3 class="card-title">Support a Streamer</h3>
+                    <p class="card-content">Boost streamers who are funding education for members of their community.</p>
+                    <button class="card-button">View Streamers</button>
                 </div>
                 <div class="card">
-                    <h3>Track Your Impact</h3>
-                    <p>See the difference your contributions are making through real-time progress updates.</p>
-                    <button>View Impact</button>
+                    <h3 class="card-title">Track Your Impact</h3>
+                    <p class="card-content">See the difference your contributions are making through real-time progress updates.</p>
+                    <button class="card-button">View Impact</button>
                 </div>
             </div>
         </div>
