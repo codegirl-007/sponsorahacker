@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+    <title>Goals</title>
+    <style>
+        .wishlist-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .wishlist-page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .wishlist-page-header h1 {
+            font-size: 2em;
+            color: #457B9D; /* Muted blue for main headings */
+        }
+
+        .wishlist-page-header p {
+            font-size: 1.1em;
+            color: #495057; /* Slightly darker gray for descriptions */
+        }
+
+        section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #FFFFFF; /* White for section backgrounds */
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-wishlist h2, .wishlist-items h2 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .add-wishlist h2 {
+            color: #A3C1AD; /* Muted green for emphasis */
+        }
+
+        .wishlist-items h2 {
+            color: #457B9D; /* Muted blue */
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #495057; /* Dark gray for labels */
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #DDD;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: none;
+            height: 100px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .primary-btn {
+            background-color: #457B9D; /* Muted blue */
+            color: #FFFFFF;
+        }
+
+        .primary-btn:hover {
+            background-color: #356081;
+        }
+
+        .danger-btn {
+            background-color: #E57373; /* Light muted red */
+            color: #FFFFFF;
+        }
+
+        .danger-btn:hover {
+            background-color: #D32F2F;
+        }
+
+        .items {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #DDD;
+            border-radius: 5px;
+            background-color: #F9F9F9; /* Subtle light gray for contrast */
+        }
+
+        .item-info h3 {
+            margin: 0 0 5px 0;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .item-info p {
+            margin: 0;
+            font-size: 1em;
+            color: #666;
+        }
+
+        .progress {
+            font-weight: bold;
+            color: #457B9D; /* Muted blue for progress text */
+        }
+
+        .footer a:hover {
+            color: #FFFFFF;
+        }
+
+        @media (max-width: 768px) {
+            .items {
+                gap: 15px;
+            }
+
+            .item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .item button {
+                margin-top: 10px;
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+{{template "pageheader"}}
+<div class="wishlist-container">
+    <header class="wishlist-page-header">
+        <h1>Manage Your Goals</h1>
+        <p>Add new goals or track progress on your current items.</p>
+    </header>
+
+    <section class="add-wishlist">
+        <h2>Add a New Goal</h2>
+        <form id="add-item-form">
+            <div class="form-group">
+                <label for="item-name">Goal Name</label>
+                <input type="text" id="item-name" name="item-name" placeholder="e.g., Full-Stack Certification" required>
+            </div>
+            <div class="form-group">
+                <label for="funding-amount">Amount of funding needed</label>
+                <input type="text" inputmode="numeric" id="funding-amount" name="funding-amount" placeholder="100.00" required>
+            </div>
+            <div class="form-group">
+                <label for="item-description">Description</label>
+                <textarea id="item-description" name="item-description" placeholder="Why is this goal important?" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="item-url">Link to learn more:</label>
+                <input type="text" id="item-url" name="item-url" placeholder="Where can we learn more?" required></input>
+            </div>
+            <button type="submit" class="btn primary-btn">Add to Wishlist</button>
+        </form>
+    </section>
+
+    <section class="wishlist-items">
+        <h2>Your Current Wishlist</h2>
+        <div class="items">
+            <div class="item">
+                <div class="item-info">
+                    <h3>Full-Stack Development Certification</h3>
+                    <p>Progress: <span class="progress">75%</span> funded</p>
+                </div>
+                <button class="btn danger-btn">Remove</button>
+            </div>
+            <div class="item">
+                <div class="item-info">
+                    <h3>Data Science Course</h3>
+                    <p>Progress: <span class="progress">40%</span> funded</p>
+                </div>
+                <button class="btn danger-btn">Remove</button>
+            </div>
+        </div>
+    </section>
+
+
+</div>
+{{template "footer"}}
+</body>
+</html>

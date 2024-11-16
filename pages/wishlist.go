@@ -5,8 +5,8 @@ import (
 	"net/http"
 )
 
-func Wishlist(c *gin.Context) {
-	c.HTML(http.StatusOK, "wishlist.html", gin.H{
+func Goals(c *gin.Context) {
+	c.HTML(http.StatusOK, "goals.html", gin.H{
 		"title": "Sponsor A Hacker",
 	})
 }
