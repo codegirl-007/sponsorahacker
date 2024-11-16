@@ -2,12 +2,15 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/sessions"
 	"github.com/joho/godotenv"
 	"github.com/markbates/goth"
+	"github.com/markbates/goth/gothic"
 	"github.com/markbates/goth/providers/twitch"
 	"log"
 	"os"
 	"sponsorahacker/auth"
+	"sponsorahacker/config"
 	"sponsorahacker/pages"
 )
 
@@ -23,6 +26,8 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
+	sessionSecret := config.GetEnvVar("SESSION_SECRET")
+	gothic.Store = sessions.NewCookieStore([]byte(sessionSecret))
 	goth.UseProviders(
 		twitch.New(os.Getenv("TWITCH_CLIENT_ID"), os.Getenv("TWITCH_SECRET"), "http://localhost:8080/auth/twitch/callback"),
 		// google.New(os.Getenv("GOOGLE_CLIENT_ID"), os.Getenv("GOOGLE_SECRET"), "http://localhost:8080/auth/google/callback"),
