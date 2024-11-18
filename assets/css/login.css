@@ -1,38 +1,73 @@
-body {
-    display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center;     /* Center vertically */
-    height: 100vh;          /* Full viewport height */
-    margin: 0;              /* Remove default margin */
-    background-color: #f4f4f4;
-}
-.login-page-container {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width:400px;
+* {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-.login-button {
-    display: block; /* Change to block for vertical alignment */
-    margin: 10px 0;
-    padding: 10px 20px;
-    border-radius: 5px;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F4F1EB; /* Light cream background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.login-container {
+    text-align: center;
+    background-color: #FFFFFF; /* White box background */
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-container h1 {
+    font-size: 2em;
+    color: #457B9D; /* Muted blue */
+    margin-bottom: 10px;
+}
+
+.login-container p {
+    color: #495057; /* Dark gray */
+    font-size: 1em;
+    margin-bottom: 20px;
+}
+
+.login-container img {
+    max-width: 100px;
+    margin-bottom: 20px;
+}
+
+.login-container .twitch-button {
+    background-color: #9146FF; /* Twitch purple */
     color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
     text-decoration: none;
-    font-size: 16px;
-    font-family: "Helvetica Neue", Helvetica, serif;
+    display: inline-block;
+    margin-top: 20px;
 }
 
-.twitch {
-    background-color: #9146ff;
+.login-container .twitch-button:hover {
+    background-color: #772CE8; /* Slightly darker Twitch purple */
 }
-.google {
-    background-color: #db4437;
+
+.footer-text {
+    margin-top: 30px;
+    font-size: 0.9em;
+    color: #666;
 }
-.x {
-    background-color: #1da1f2;
+
+.footer-text a {
+    color: #457B9D;
+    text-decoration: none;
+}
+
+.footer-text a:hover {
+    text-decoration: underline;
 }
