@@ -45,6 +45,8 @@ func main() {
 	r.GET("/welcome", pages.Welcome)
 	r.GET("/goals", pages.Goals)
 
+	// post routes
+	r.POST("/goals", pages.CreateGoal)
 	runErr := r.Run(":8080")
 
 	if runErr != nil {
