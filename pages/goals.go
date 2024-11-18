@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"net/url"
 	"sponsorahacker/db"
 	"sponsorahacker/utils"
 	"strconv"
@@ -45,7 +46,9 @@ func CreateGoal(c *gin.Context) {
 	description := strings.TrimSpace(c.PostForm("item-description"))
 	learnMoreURL := strings.TrimSpace(c.PostForm("item-url"))
 
-	if name == "" && fundingAmountStr == "" && description == "" && learnMoreURL == "" {
+	_, validateErr := url.Parse(learnMoreURL)
+
+	if name == "" && fundingAmountStr == "" && description == "" && learnMoreURL == "" && validateErr != nil {
 		fieldError := fmt.Errorf("missing a required field. Please check and make sure all fields are filled out")
 		c.HTML(http.StatusOK, "goals.html", gin.H{
 			"title":      "Sponsor A Hacker",
