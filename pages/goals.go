@@ -57,9 +57,7 @@ func CreateGoal(c *gin.Context) {
 		})
 	}
 
-	createdDate := time.Now()
-	updatedDate := time.Now()
-	fundingAmount, err := strconv.ParseFloat(fundingAmountStr, 64)
+	fundingAmount, err := strconv.ParseFloat(strings.Replace(fundingAmountStr, ",", "", -1), 64)
 
 	if err != nil {
 		fieldError := fmt.Errorf("invalid funding amount")
@@ -69,6 +67,9 @@ func CreateGoal(c *gin.Context) {
 			"error":      fieldError,
 		})
 	}
+
+	createdDate := time.Now()
+	updatedDate := time.Now()
 
 	_, err = dbClient.Exec(`INSERT INTO goals (name, description, learn_more_url, funding_amount, created_at, updated_at)
 VALUES (?, ?, ?, ?, ?, ?);`, name, description, learnMoreURL, fundingAmount, createdDate, updatedDate)
