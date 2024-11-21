@@ -40,7 +40,7 @@ func Callback(c *gin.Context) {
 	}
 
 	// For now, redirect to profile page after successful login
-	c.Redirect(http.StatusTemporaryRedirect, "/")
+	c.Redirect(http.StatusTemporaryRedirect, "/welcome")
 }
 
 func Logout(c *gin.Context) {
