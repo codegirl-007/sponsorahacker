@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/securecookie"
 	"github.com/markbates/goth"
+	"log"
 	"net/url"
 	"sponsorahacker/config"
 	"sponsorahacker/db"
@@ -32,6 +33,12 @@ type Session struct {
 	expiresOn   string
 }
 
+type User struct {
+	NickName        string `json:"NickName"`
+	Provider        string `json:"Provider"`
+	Provider_userid string `json:"UserID"`
+}
+
 var secureCookie *securecookie.SecureCookie
 
 func NewSessionManager(db *db.DBClient) SessionManager {
@@ -40,7 +47,6 @@ func NewSessionManager(db *db.DBClient) SessionManager {
 }
 
 func (s *SessionManager) CreateSession(user goth.User, c *gin.Context) error {
-	// create a new row that will store the user data
 	sessionData, err := json.Marshal(user)
 	if err != nil {
 		fmt.Printf("error marshalling user: %v", err)
@@ -53,13 +59,20 @@ func (s *SessionManager) CreateSession(user goth.User, c *gin.Context) error {
 		expiresOn:   user.ExpiresAt.Format("20060102150405"),
 	}
 
-	// todo: insert the query once you figure the rest out
 	result, err := s.DB.Exec(`
     INSERT INTO sessions (sessionData, createdOn, modifiedOn, expiresOn)
     VALUES (?, ?, ?, ?);`, auth.sessionData, auth.createdOn, auth.modifiedOn, auth.expiresOn)
 
 	if result == nil {
 		fmt.Printf("error getting result from database while creating the session: %v", err)
+		return err
+	}
+	spuser, err := GetUserFromSession(auth)
+
+	err = s.SaveUserIfNotExist(spuser)
+
+	if err != nil {
+		log.Printf("error creating session: %v", err)
 		return err
 	}
 
@@ -111,6 +124,45 @@ func (s *SessionManager) GetSession(session sessions.Session) (Session, error) {
 
 	// if we get nothing, well, we go nothing
 	return Session{}, nil
+}
+
+func GetUserFromSession(session Session) (User, error) {
+	var user User
+
+	fmt.Println(session.sessionData)
+	err := json.Unmarshal([]byte(session.sessionData), &user)
+
+	if err != nil {
+		fmt.Println("error unmarshalling session data for user", err)
+
+		return User{}, err
+	}
+
+	return user, nil
+}
+
+func (s *SessionManager) SaveUserIfNotExist(user User) error {
+	rows, err := s.DB.Query(`SELECT * FROM users WHERE provider_userid = ? AND provider = ? LIMIT 1`, user.Provider_userid, user.Provider)
+
+	if err != nil {
+		fmt.Printf("error getting user from database: %v", err)
+		return err
+	}
+
+	exists := rows.Next()
+
+	if !exists {
+		_, err = s.DB.Exec(`
+	  INSERT INTO users (provider_userid, provider, username)
+	  VALUES (?, ?, ?);`, user.Provider_userid, user.Provider, user.NickName)
+
+		if err != nil {
+			fmt.Printf("error inserting user: %v", err)
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (s *SessionManager) DeleteSession(c *gin.Context) error {
