@@ -3,24 +3,14 @@ package pages
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 	"net/url"
-	"sponsorahacker/db"
+	"sponsorahacker/models"
 	"sponsorahacker/utils"
 	"strconv"
 	"strings"
 	"time"
 )
-
-type Goal struct {
-	Name          string  `form:"item-name" db:"name" binding:"required"`
-	FundingAmount float64 `form:"funding-amount" db:"funding_amount" binding:"required,numeric"`
-	Description   string  `form:"item-description" db:"description" binding:"required"`
-	LearnMoreURL  *string `form:"item-url" db:"learn_more_url"` // Optional field
-	CreatedAt     string  `db:"created_at"`
-	UpdatedAt     string  `db:"updated_at"`
-}
 
 func Goals(c *gin.Context) {
 	isLoggedIn := utils.CheckIfLoggedIn(c)
@@ -32,36 +22,36 @@ func Goals(c *gin.Context) {
 }
 
 func CreateGoal(c *gin.Context) {
-	dbClient, err := db.NewDbClient()
+	isLoggedIn := utils.CheckIfLoggedIn(c)
+	trim := strings.TrimSpace
+	parseFloat := strconv.ParseFloat
+	parseUrl := url.Parse
 
-	if err != nil {
-		log.Fatalf("Could not connect to database: %v", err)
-		return
+	isEmpty := func(s string) bool {
+		return trim(s) == ""
 	}
 
-	isLoggedIn := utils.CheckIfLoggedIn(c)
+	name := trim(c.PostForm("item-name"))
+	fundingAmountStr := trim(c.PostForm("funding-amount"))
+	description := trim(c.PostForm("item-description"))
+	learnMoreURL := trim(c.PostForm("item-url"))
 
-	name := strings.TrimSpace(c.PostForm("item-name"))
-	fundingAmountStr := strings.TrimSpace(c.PostForm("funding-amount"))
-	description := strings.TrimSpace(c.PostForm("item-description"))
-	learnMoreURL := strings.TrimSpace(c.PostForm("item-url"))
+	_, err := parseUrl(learnMoreURL)
 
-	_, validateErr := url.Parse(learnMoreURL)
-
-	if name == "" && fundingAmountStr == "" && description == "" && learnMoreURL == "" && validateErr != nil {
+	if isEmpty(name) && isEmpty(fundingAmountStr) && isEmpty(description) && isEmpty(learnMoreURL) && err != nil {
 		fieldError := fmt.Errorf("missing a required field. Please check and make sure all fields are filled out")
-		c.HTML(http.StatusOK, "goals.html", gin.H{
+		c.HTML(http.StatusNotAcceptable, "goals.html", gin.H{
 			"title":      "Sponsor A Hacker",
 			"isLoggedIn": isLoggedIn,
 			"error":      fieldError,
 		})
 	}
 
-	fundingAmount, err := strconv.ParseFloat(strings.Replace(fundingAmountStr, ",", "", -1), 64)
+	fundingAmount, err := parseFloat(strings.Replace(fundingAmountStr, ",", "", -1), 64)
 
 	if err != nil {
 		fieldError := fmt.Errorf("invalid funding amount")
-		c.HTML(http.StatusOK, "goals.html", gin.H{
+		c.HTML(http.StatusInternalServerError, "goals.html", gin.H{
 			"title":      "Sponsor A Hacker",
 			"isLoggedIn": isLoggedIn,
 			"error":      fieldError,
@@ -71,12 +61,20 @@ func CreateGoal(c *gin.Context) {
 	createdDate := time.Now()
 	updatedDate := time.Now()
 
-	_, err = dbClient.Exec(`INSERT INTO goals (name, description, learn_more_url, funding_amount, created_at, updated_at)
-VALUES (?, ?, ?, ?, ?, ?);`, name, description, learnMoreURL, fundingAmount, createdDate, updatedDate)
+	goal := models.Goal{
+		Name:          name,
+		FundingAmount: fundingAmount,
+		Description:   description,
+		LearnMoreURL:  learnMoreURL,
+		CreatedAt:     createdDate,
+		UpdatedAt:     updatedDate,
+	}
+
+	err = goal.CreateGoal()
 
 	if err != nil {
 		fmt.Printf("Error inserting goal: %v", err)
-		c.HTML(http.StatusOK, "goals.html", gin.H{
+		c.HTML(http.StatusInternalServerError, "goals.html", gin.H{
 			"title":      "Sponsor A Hacker",
 			"isLoggedIn": isLoggedIn,
 			"error":      err,
