@@ -44,12 +44,11 @@ func main() {
 	r.GET("/login", pages.Login)
 	r.GET("/welcome", pages.Welcome)
 	r.GET("/goals", pages.Goals)
-
 	// post routes
 	r.POST("/goals", pages.CreateGoal)
-	runErr := r.Run(":8080")
+	err = r.Run(":8080")
 
-	if runErr != nil {
-		panic(runErr)
+	if err != nil {
+		panic(err)
 	}
 }
