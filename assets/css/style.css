@@ -28,7 +28,16 @@ body {
     font-family: "Helvetica Neue", "Helvetica", serif;
     margin: 0;
     align-self: center;
+}
+
+.title-link {
     font-size: 1.75rem;
+    color: #000;
+    text-decoration: none;
+}
+
+.title-link:hover {
+    color: #666;
 }
 
 .login-container {

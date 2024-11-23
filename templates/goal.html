@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
+    <title>Goal Page</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F4F1EB; /* Light cream background */
+            margin: 0;
+            padding: 0;
+            color: #2B2D42; /* Dark gray text */
+        }
+
+        header {
+            background-color: #457B9D; /* Muted blue header */
+            color: #FFFFFF;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #FFFFFF; /* White card */
+            border: 1px solid #A3C1AD; /* Muted green border */
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #457B9D; /* Muted blue text */
+        }
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 20px;
+        }
+
+        p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .goal-details {
+            margin-bottom: 20px;
+        }
+
+        .goal-progress {
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            background-color: #A3C1AD; /* Muted green */
+            height: 20px;
+            width: 70%; /* Example progress, replace dynamically */
+            max-width: 100%;
+            border-radius: 5px;
+        }
+
+        .progress-container {
+            background-color: #F4F1EB; /* Light cream */
+            border: 1px solid #A3C1AD; /* Muted green */
+            border-radius: 5px;
+            height: 20px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .actions button {
+            background-color: #A3C1AD; /* Muted green button */
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .actions button:hover {
+            background-color: #87B09C; /* Slightly darker muted green */
+        }
+
+        .link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .link a {
+            color: #457B9D; /* Muted blue */
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+{{template "pageheader" . }}
+
+<main>
+    <!-- Goal Details Section -->
+    <section class="goal-details">
+        <h2>Goal: Learn Full-Stack Development</h2>
+        <p>Description: A comprehensive course to master full-stack web development. This goal includes learning front-end and back-end technologies to build robust applications.</p>
+        <p>Funding Needed: <strong>$500</strong></p>
+        <p>Funding Received: <strong>$350</strong></p>
+    </section>
+
+    <!-- Progress Bar Section -->
+    <section class="goal-progress">
+        <h2>Funding Progress</h2>
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+        <p>70% funded</p>
+    </section>
+
+    <!-- Actions Section -->
+    <section class="actions">
+        <button>Donate</button>
+        <button>Share</button>
+    </section>
+
+    <!-- External Link Section -->
+    <div class="link">
+        <a href="#">Learn more about this goal</a>
+    </div>
+</main>
+</body>
+</html>

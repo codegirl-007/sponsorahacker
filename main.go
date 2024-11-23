@@ -44,6 +44,7 @@ func main() {
 	r.GET("/login", pages.Login)
 	r.GET("/welcome", pages.Welcome)
 	r.GET("/goals", pages.Goals)
+	r.GET("/goals/:goalId", pages.Goal)
 	// post routes
 	r.POST("/goals", pages.CreateGoal)
 	err = r.Run(":8080")

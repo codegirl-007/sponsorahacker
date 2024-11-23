@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Hackathon Project</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F4F1EB; /* Light cream background */
+            color: #2B2D42; /* Dark gray text */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background-color: #FFFFFF; /* White form background */
+            border: 2px solid #457B9D; /* Muted blue border */
+            border-radius: 10px;
+            padding: 20px;
+            width: 400px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h2 {
+            text-align: center;
+            color: #457B9D; /* Muted blue heading */
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea,
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #A3C1AD; /* Muted green border */
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .form-group input[type="file"] {
+            padding: 5px;
+        }
+
+        .form-group input[type="file"]::file-selector-button {
+            background-color: #457B9D; /* Muted blue button */
+            color: #FFFFFF; /* White text */
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .form-group input[type="file"]::file-selector-button:hover {
+            background-color: #356081; /* Slightly darker blue */
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            background-color: #A3C1AD; /* Muted green button */
+            color: #FFFFFF;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .submit-btn:hover {
+            background-color: #87B09C; /* Slightly darker green */
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Submit Your Hack</h2>
+        <form action="/submit-hack" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="hack-name">Hack Name</label>
+                <input type="text" id="hack-name" name="hack-name" placeholder="Enter your hack name" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" placeholder="Describe your hack" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="docker-file">Upload Docker Image</label>
+                <input type="file" id="docker-file" name="docker-file" accept=".tar,.tar.gz" required>
+            </div>
+            <button type="submit" class="submit-btn">Submit Hack</button>
+        </form>
+    </div>
+</body>
+</html>

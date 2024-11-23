@@ -1,14 +1,17 @@
 {{define "pageheader"}}
 <div class="header">
-    <img src="assets/images/logo.jpg" class="logo"/>
-    <h1 class="title">
-        Sponsor A Hacker
-    </h1>
+    <img src="/assets/images/logo.jpg" class="logo"/>
 
     {{if eq .isLoggedIn false}}
+        <h1 class="title">
+            <a href="/" class="title-link">Sponsor A Hacker</a>
+        </h1>
         <a href="/login" class="login-banner-link">Login</a>
     {{ else }}
-        <a href="auth/logout/twitch" class="login-banner-link">Logout</a>
+        <h1 class="title">
+            <a href="/welcome" class="title-link">Sponsor A Hacker</a>
+        </h1>
+        <a href="/auth/logout/twitch" class="login-banner-link">Logout</a>
     {{ end }}
 
 </div>

@@ -3,29 +3,29 @@ package pages
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
-	"log"
+	"github.com/markbates/goth/gothic"
 	"net/http"
-	"sponsorahacker/db"
-	"sponsorahacker/utils"
+	"sponsorahacker/auth"
 )
 
 func Home(c *gin.Context) {
+	user, err := gothic.GetFromSession("user", c.Request)
 
-	envErr := godotenv.Load()
-	if envErr != nil {
-		log.Fatal("Error loading .env file")
-	}
-	isLoggedIn := utils.CheckIfLoggedIn(c)
-	fmt.Println("isLoggedIn:", isLoggedIn)
-
-	_, err := db.NewDbClient()
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("error checking login", err)
 	}
 
-	c.HTML(http.StatusOK, "index.html", gin.H{
-		"title":      "Sponsor a Hacker",
-		"isLoggedIn": isLoggedIn,
-	})
+	auth.HydrateUser(user)
+
+	if err != nil {
+		fmt.Println("error checking login", err)
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			"title":      "Sponsor a Hacker",
+			"isLoggedIn": false,
+		})
+
+		return
+	}
+
+	c.Redirect(http.StatusTemporaryRedirect, "/welcome")
 }

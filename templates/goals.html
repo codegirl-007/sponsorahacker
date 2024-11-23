@@ -13,7 +13,7 @@
 
 <div class="goals-container">
     <header class="goals-page-header">
-        <h1 class="goals-page-header-title">Manage Your Goals</h1>
+        <h1 class="goals-page-header-title">Ready to set some goals, {{ .user }}?</h1>
         <p class="goals-page-header-content">Add new goals or track progress on your current items.</p>
     </header>
 
@@ -43,20 +43,15 @@
     <section>
         <h2 class="add-goals-title">Your Current Goals</h2>
         <div class="goal-items">
-            <div class="goal-item">
-                <div class="item-info">
-                    <h3 class="item-info-title">Full-Stack Development Certification</h3>
-                    <p class="item-info-content">Progress: <span class="goal-progress">75%</span> funded</p>
+            {{ range .goals }}
+                <div class="goal-item">
+                    <div class="item-info">
+                        <h3 class="item-info-title">{{ .Name }}</h3>
+                        <p>{{ .Description }}</p>
+                        <p class="item-info-content">Progress: <span class="goal-progress">75%</span> funded</p>
+                    </div>
                 </div>
-                <button class="btn danger-btn">Remove</button>
-            </div>
-            <div class="goal-item">
-                <div class="item-info">
-                    <h3 class="item-info-title">Data Science Course</h3>
-                    <p class="item-info-content">Progress: <span class="goal-progress">40%</span> funded</p>
-                </div>
-                <button class="btn danger-btn">Remove</button>
-            </div>
+            {{ end }}
         </div>
     </section>
 </div>

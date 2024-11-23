@@ -34,6 +34,7 @@ func (db *DBClient) Query(query string, args ...interface{}) (*sqlx.Rows, error)
 }
 
 func (db *DBClient) Exec(query string, args ...interface{}) (sql.Result, error) {
+	fmt.Println("running query")
 	return db.db.Exec(query, args...)
 }
 
